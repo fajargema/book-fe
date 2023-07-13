@@ -4,6 +4,8 @@ import { getToken } from "../utils/common";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/navbar";
+import "../assets/card.css";
+
 const Home = () => {
   const [profile, setProfile] = useState({});
   const [page, setPage] = useState(1);
@@ -89,64 +91,54 @@ const Home = () => {
                 </button>
               </div>
 
-              <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">ISBN</th>
-                      <th scope="col">Title</th>
-                      <th scope="col">Author</th>
-                      <th scope="col">Published</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.data?.map((e, i) => (
-                      <>
-                        <tr>
-                          <th scope="row">{i + 1}</th>
-                          <td>{e.isbn}</td>
-                          <td>{e.title}</td>
-                          <td>{e.author}</td>
-                          <td>{moment(e.published).format("MMMM DD, YYYY")}</td>
-                          <td>
-                            <button
-                              className="btn btn-primary btn-sm mx-1"
-                              onClick={() => {
-                                handleDetail(e.id);
-                              }}
-                            >
-                              detail
-                            </button>
-                            <button
-                              className="btn btn-primary btn-sm mx-1"
-                              onClick={() => {
-                                handleUpdate(e.id);
-                              }}
-                            >
-                              update
-                            </button>
-                            <button
-                              className="btn btn-danger btn-sm mx-1"
-                              onClick={() => {
-                                const confirmDelete = window.confirm(
-                                  "Are you sure you want to delete this item?"
-                                );
-                                if (confirmDelete) {
-                                  handleDelete(e.id);
-                                }
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      </>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {data?.data?.map((e) => (
+                <>
+                  <div className="container">
+                    <div className="card card-custom">
+                      <div className="card-body">
+                        <h5 className="card-title">{e.title}</h5>
+                        <p>
+                          {moment(e.published).format("MMMM DD, YYYY")} |{" "}
+                          <i>
+                            {e.pages} pages | {e.publisher}
+                          </i>
+                        </p>
+                        <hr />
+                        <p className="card-text">{e.description}</p>
+                        <button
+                          className="btn btn-primary btn-sm mx-1"
+                          onClick={() => {
+                            handleDetail(e.id);
+                          }}
+                        >
+                          detail
+                        </button>
+                        <button
+                          className="btn btn-primary btn-sm mx-1"
+                          onClick={() => {
+                            handleUpdate(e.id);
+                          }}
+                        >
+                          update
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm mx-1"
+                          onClick={() => {
+                            const confirmDelete = window.confirm(
+                              "Are you sure you want to delete this item?"
+                            );
+                            if (confirmDelete) {
+                              handleDelete(e.id);
+                            }
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ))}
             </div>
           </div>
         </>

@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
+
+.card-custom {
+  border-radius: 25px;
+  border: none;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 2%;
+}
