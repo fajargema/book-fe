@@ -5,7 +5,7 @@ import "../src/assets/loading.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./page/login";
 import Home from "./page/home";
-import PrivateRoute from "./utils/PrivateRoute";
+import PrivateRoute from "./utils/privateRoute";
 import Register from "./page/register";
 import AddData from "./page/addData";
 import DetailData from "./page/detailData";

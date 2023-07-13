@@ -18,7 +18,7 @@ const Home = () => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const totalPages = data?.total_pages || 1;
+  const totalPages = data?.last_page || 1;
   const getProfile = async () => {
     setIsLoading(true);
     await API.get("api/user", config)
@@ -33,7 +33,7 @@ const Home = () => {
         setIsLoading(false);
       });
   };
-  const getBook = async () => {
+  const getBook = async (page) => {
     setIsLoading(true);
     await API.get(`api/books?page=${page}`, config)
       .then((res) => {
@@ -66,11 +66,11 @@ const Home = () => {
   };
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
-    getBook();
+    getBook(pageNumber);
   };
   useEffect(() => {
     getProfile();
-    getBook();
+    getBook(page);
   }, []);
   return (
     <>
