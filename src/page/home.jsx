@@ -18,6 +18,7 @@ const Home = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+  const totalPages = data?.total_pages || 1;
   const getProfile = async () => {
     setIsLoading(true);
     await API.get("api/user", config)
@@ -36,6 +37,7 @@ const Home = () => {
     setIsLoading(true);
     await API.get(`api/books?page=${page}`, config)
       .then((res) => {
+        console.log(page);
         const response = res.data;
         setData(response);
       })
@@ -62,6 +64,10 @@ const Home = () => {
         console.log(err);
       });
   };
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+    getBook();
+  };
   useEffect(() => {
     getProfile();
     getBook();
@@ -70,7 +76,11 @@ const Home = () => {
     <>
       {isLoading ? (
         <>
-          <h1>Loading Data</h1>
+          <div className="spinner-container">
+            <div className="spinner-border text-success" role="status">
+              <span className="sr-only"></span>
+            </div>
+          </div>
         </>
       ) : (
         <>
@@ -78,7 +88,9 @@ const Home = () => {
 
           <div className="container">
             <div className="row">
-              <h1>Selamat datang {profile.name}</h1>
+              <h1>
+                Selamat datang {profile.name} {totalPages}
+              </h1>
               <hr />
               <div className="container mb-3">
                 <button
@@ -106,7 +118,7 @@ const Home = () => {
                         <hr />
                         <p className="card-text">{e.description}</p>
                         <button
-                          className="btn btn-primary btn-sm mx-1"
+                          className="btn btn-secondary btn-sm mx-1"
                           onClick={() => {
                             handleDetail(e.id);
                           }}
@@ -139,6 +151,49 @@ const Home = () => {
                   </div>
                 </>
               ))}
+
+              {/* Pagination */}
+              <nav>
+                <ul className="pagination">
+                  {page > 1 && (
+                    <li className="page-item">
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(page - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                  )}
+
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <li
+                      key={index + 1}
+                      className={`page-item ${
+                        page === index + 1 ? "active" : ""
+                      }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(index + 1)}
+                      >
+                        {index + 1}
+                      </button>
+                    </li>
+                  ))}
+
+                  {page < totalPages && (
+                    <li className="page-item">
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(page + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </nav>
             </div>
           </div>
         </>
