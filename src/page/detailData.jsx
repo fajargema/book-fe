@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API } from "../apis/api";
 import { getToken } from "../utils/common";
 import { useParams } from "react-router-dom";
+import { Navbar } from "../components/navbar";
 
 const DetailData = () => {
   const { id } = useParams();
@@ -38,6 +39,7 @@ const DetailData = () => {
         </>
       ) : (
         <>
+          <Navbar />
           <div className="container mt-5">
             <div className="card">
               <div className="card-header">

@@ -4,6 +4,7 @@ import { getToken } from "../utils/common";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import moment from "moment/moment";
+import { Navbar } from "../components/navbar";
 
 const UpdateData = () => {
   const { id } = useParams();
@@ -84,6 +85,7 @@ const UpdateData = () => {
         </>
       ) : (
         <>
+          <Navbar />
           <div className="container mt-5">
             <h2 className="mb-3">Update Book {data.title}</h2>
             <div className="mb-3">

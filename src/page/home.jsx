@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { API } from "../apis/api";
-import { getToken, removeUserSession } from "../utils/common";
+import { getToken } from "../utils/common";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/navbar";
@@ -44,19 +44,6 @@ const Home = () => {
         setIsLoading(false);
       });
   };
-  const handleProfile = () => {
-    navigate("/profile");
-  };
-  const handleLogout = async () => {
-    await API.delete("api/user/logout", config)
-      .then(() => {
-        removeUserSession();
-        navigate("/", { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const handleDetail = (id) => {
     navigate(`/detail/${id}`);
   };
@@ -85,75 +72,81 @@ const Home = () => {
         </>
       ) : (
         <>
-          <Navbar profile={handleProfile} logout={handleLogout} />
+          <Navbar />
 
           <div className="container">
             <div className="row">
               <h1>Selamat datang {profile.name}</h1>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  navigate("/add");
-                }}
-              >
-                + Add Book
-              </button>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ISBN</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Published</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.data?.map((e, i) => (
-                    <>
-                      <tr>
-                        <th scope="row">{i + 1}</th>
-                        <td>{e.isbn}</td>
-                        <td>{e.title}</td>
-                        <td>{e.author}</td>
-                        <td>{moment(e.published).format("MMMM DD, YYYY")}</td>
-                        <td>
-                          <button
-                            className="btn btn-primary btn-sm mx-1"
-                            onClick={() => {
-                              handleDetail(e.id);
-                            }}
-                          >
-                            detail
-                          </button>
-                          <button
-                            className="btn btn-primary btn-sm mx-1"
-                            onClick={() => {
-                              handleUpdate(e.id);
-                            }}
-                          >
-                            update
-                          </button>
-                          <button
-                            className="btn btn-danger btn-sm mx-1"
-                            onClick={() => {
-                              const confirmDelete = window.confirm(
-                                "Are you sure you want to delete this item?"
-                              );
-                              if (confirmDelete) {
-                                handleDelete(e.id);
-                              }
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    </>
-                  ))}
-                </tbody>
-              </table>
+              <hr />
+              <div className="container mb-3">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    navigate("/add");
+                  }}
+                >
+                  + Add Book
+                </button>
+              </div>
+
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">ISBN</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Author</th>
+                      <th scope="col">Published</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data?.data?.map((e, i) => (
+                      <>
+                        <tr>
+                          <th scope="row">{i + 1}</th>
+                          <td>{e.isbn}</td>
+                          <td>{e.title}</td>
+                          <td>{e.author}</td>
+                          <td>{moment(e.published).format("MMMM DD, YYYY")}</td>
+                          <td>
+                            <button
+                              className="btn btn-primary btn-sm mx-1"
+                              onClick={() => {
+                                handleDetail(e.id);
+                              }}
+                            >
+                              detail
+                            </button>
+                            <button
+                              className="btn btn-primary btn-sm mx-1"
+                              onClick={() => {
+                                handleUpdate(e.id);
+                              }}
+                            >
+                              update
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm mx-1"
+                              onClick={() => {
+                                const confirmDelete = window.confirm(
+                                  "Are you sure you want to delete this item?"
+                                );
+                                if (confirmDelete) {
+                                  handleDelete(e.id);
+                                }
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      </>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </>

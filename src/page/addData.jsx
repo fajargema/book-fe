@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API } from "../apis/api";
 import { getToken } from "../utils/common";
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/navbar";
 const AddData = () => {
   const [book, setBook] = useState({
     isbn: "",
@@ -49,6 +50,7 @@ const AddData = () => {
   };
   return (
     <>
+      <Navbar />
       <div className="container mt-5">
         <h2 className="mb-3">Add Book</h2>
         <div className="mb-3">

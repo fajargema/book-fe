@@ -1,78 +1,106 @@
-export const Navbar = (profile, logout) => {
+import { NavLink, useNavigate } from "react-router-dom";
+import { API } from "../apis/api";
+import { getToken, removeUserSession } from "../utils/common";
+import { useEffect, useState } from "react";
+
+export const Navbar = () => {
+  const navigate = useNavigate();
+  const token = getToken();
+  const [profile, setProfile] = useState({});
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const getProfile = async () => {
+    await API.get("api/user", config)
+      .then((res) => {
+        const response = res.data;
+        setProfile(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleProfile = () => {
+    navigate("/profile");
+  };
+  const handleLogout = async () => {
+    await API.delete("api/user/logout", config)
+      .then(() => {
+        removeUserSession();
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
         <div className="container-fluid">
+          <NavLink className="navbar-brand" to={"/home"}>
+            Book FE
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
+            data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <i className="fas fa-bars" />
+            <span className="navbar-toggler-icon" />
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <a className="navbar-brand mt-2 mt-lg-0" href="#">
-              Book React
-            </a>
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <div className=" collapse navbar-collapse" id="navbarNavDropdown">
+            <ul className="navbar-nav ms-auto ">
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link mx-2 active" to={"/home"}>
                   Home
+                </NavLink>
+              </li>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link mx-2 dropdown-toggle"
+                  href="#"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {profile.name}
                 </a>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => {
+                        handleProfile();
+                      }}
+                    >
+                      My profile
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => {
+                        handleLogout();
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
               </li>
             </ul>
-          </div>
-          <div className="d-flex align-items-center">
-            <a className="text-reset me-3" href="#">
-              <i className="fas fa-shopping-cart" />
-            </a>
-            <div className="dropdown">
-              <a
-                className="dropdown-toggle d-flex align-items-center hidden-arrow"
-                href="#"
-                id="navbarDropdownMenuAvatar"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                  className="rounded-circle"
-                  height={25}
-                  alt="Black and White Portrait of a Man"
-                  loading="lazy"
-                />
-              </a>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdownMenuAvatar"
-              >
-                <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => {
-                      profile();
-                    }}
-                  >
-                    My profile
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => {
-                      logout();
-                    }}
-                  >
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </nav>
