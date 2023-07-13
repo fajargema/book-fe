@@ -18,7 +18,6 @@ const Home = () => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const totalPages = data?.last_page || 1;
   const getProfile = async () => {
     setIsLoading(true);
     await API.get("api/user", config)
@@ -64,6 +63,7 @@ const Home = () => {
         console.log(err);
       });
   };
+  const totalPages = data?.last_page || 1;
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
     getBook(pageNumber);
@@ -103,56 +103,59 @@ const Home = () => {
                 </button>
               </div>
 
-              {data?.data?.map((e) => (
-                <>
-                  <div className="container">
-                    <div className="card card-custom">
-                      <div className="card-body">
-                        <h5 className="card-title">{e.title}</h5>
-                        <p>
-                          {moment(e.published).format("MMMM DD, YYYY")} |{" "}
-                          <i>
-                            {e.pages} pages | {e.publisher}
-                          </i>
-                        </p>
-                        <hr />
-                        <p className="card-text">{e.description}</p>
-                        <button
-                          className="btn btn-secondary btn-sm mx-1"
-                          onClick={() => {
-                            handleDetail(e.id);
-                          }}
-                        >
-                          detail
-                        </button>
-                        <button
-                          className="btn btn-primary btn-sm mx-1"
-                          onClick={() => {
-                            handleUpdate(e.id);
-                          }}
-                        >
-                          update
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm mx-1"
-                          onClick={() => {
-                            const confirmDelete = window.confirm(
-                              "Are you sure you want to delete this item?"
-                            );
-                            if (confirmDelete) {
-                              handleDelete(e.id);
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
+              <div className="row">
+                {data?.data?.map((e) => (
+                  <>
+                    <div className="col-md-6">
+                      <div className="container">
+                        <div className="card card-custom">
+                          <div className="card-body">
+                            <h5 className="card-title">{e.title}</h5>
+                            <p>
+                              {moment(e.published).format("MMMM DD, YYYY")} |{" "}
+                              <i>
+                                {e.pages} pages | {e.publisher}
+                              </i>
+                            </p>
+                            <hr />
+                            <p className="card-text">{e.description}</p>
+                            <button
+                              className="btn btn-secondary btn-sm mx-1"
+                              onClick={() => {
+                                handleDetail(e.id);
+                              }}
+                            >
+                              detail
+                            </button>
+                            <button
+                              className="btn btn-primary btn-sm mx-1"
+                              onClick={() => {
+                                handleUpdate(e.id);
+                              }}
+                            >
+                              update
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm mx-1"
+                              onClick={() => {
+                                const confirmDelete = window.confirm(
+                                  "Are you sure you want to delete this item?"
+                                );
+                                if (confirmDelete) {
+                                  handleDelete(e.id);
+                                }
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </>
-              ))}
+                  </>
+                ))}
+              </div>
 
-              {/* Pagination */}
               <nav>
                 <ul className="pagination">
                   {page > 1 && (
